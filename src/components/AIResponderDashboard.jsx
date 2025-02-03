@@ -92,38 +92,52 @@ const AIResponderDashboard = () => {
       
 
       case 'dashboard':
-        return (
-          <div className="stats-grid">
-            <div className="card stat-card">
-              <div className="stat-info">
-                <p className="stat-label">Initial Messages</p>
-                <p className="stat-value">{stats.initialMessages}</p>
-              </div>
-              <MessageSquare size={32} color="#059669" />
-            </div>
-            <div className="card stat-card">
-              <div className="stat-info">
-                <p className="stat-label">Followups Sent</p>
-                <p className="stat-value">{stats.followups}</p>
-              </div>
-              <Users size={32} color="#059669" />
-            </div>
-            <div className="card stat-card">
-              <div className="stat-info">
-                <p className="stat-label">Requests Sent</p>
-                <p className="stat-value">{stats.requests}</p>
-              </div>
-              <Timer size={32} color="#059669" />
-            </div>
-            <div className="card stat-card">
-              <div className="stat-info">
-                <p className="stat-label">Last Reset</p>
-                <p className="stat-value">{stats.lastReset}</p>
-              </div>
-              <BarChart size={32} color="#059669" />
-            </div>
-          </div>
-        );
+  return (
+    <div className="stats-grid">
+      <div className="card stat-card">
+        <div className="stat-info">
+          <p className="stat-label">Initial Messages</p>
+          <p className="stat-value">{stats.initialMessages}</p>
+        </div>
+        <MessageSquare size={32} color="#059669" />
+      </div>
+      <div className="card stat-card">
+        <div className="stat-info">
+          <p className="stat-label">Total Conversations</p>
+          <p className="stat-value">3</p>
+        </div>
+        <MessageSquare size={32} color="#3B82F6" />
+      </div>
+      <div className="card stat-card">
+        <div className="stat-info">
+          <p className="stat-label">Followups Sent</p>
+          <p className="stat-value">{stats.followups}</p>
+        </div>
+        <Users size={32} color="#059669" />
+      </div>
+      <div className="card stat-card">
+        <div className="stat-info">
+          <p className="stat-label">Bookings Sent</p>
+          <p className="stat-value">1</p>
+        </div>
+        <Link size={32} color="#059669" />
+      </div>
+      <div className="card stat-card">
+        <div className="stat-info">
+          <p className="stat-label">Requests Sent</p>
+          <p className="stat-value">{stats.requests}</p>
+        </div>
+        <Timer size={32} color="#059669" />
+      </div>
+      <div className="card stat-card">
+        <div className="stat-info">
+          <p className="stat-label">Last Reset</p>
+          <p className="stat-value">{stats.lastReset}</p>
+        </div>
+        <BarChart size={32} color="#059669" />
+      </div>
+    </div>
+  );
       
       case 'payments':
         return (
@@ -239,59 +253,178 @@ const AIResponderDashboard = () => {
     </div>
   );
       
-      case 'settings':
-        return (
-          <div className="card">
-            <div className="card-header">
-              <h2 className="card-title">AI Responder Settings</h2>
+  case 'settings':
+  return (
+    <div className="card">
+      <div className="card-header">
+        <h2 className="card-title">AI Responder Settings</h2>
+      </div>
+      <div className="card-content">
+        <div className="form-group">
+          <label className="form-label">Business Name</label>
+          <input 
+            type="text"
+            className="form-input"
+            defaultValue="Emerald Stream Capital"
+          />
+        </div>
+
+        <div className="form-group">
+          <label className="form-label">Calendly Integration</label>
+          <div style={{ 
+            padding: '16px',
+            backgroundColor: '#fef2f2',
+            borderRadius: '8px',
+            border: '1px solid #fee2e2'
+          }}>
+            <div style={{ 
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: '12px'
+            }}>
+              <div>
+                <p style={{ 
+                  margin: '0 0 4px 0',
+                  fontWeight: '500'
+                }}>Calendly Account</p>
+                <p style={{ 
+                  margin: '0',
+                  fontSize: '0.875rem',
+                  color: '#6b7280'
+                }}>Connect your Calendly account or enter a link manually</p>
+              </div>
+              <span style={{ 
+                backgroundColor: '#fef2f2',
+                color: '#dc2626',
+                padding: '4px 12px',
+                borderRadius: '9999px',
+                fontSize: '0.875rem',
+                border: '1px solid #fee2e2'
+              }}>
+                Disconnected
+              </span>
             </div>
-            <div className="card-content">
-              <div className="form-group">
-                <label className="form-label">Company Logo</label>
-                <LogoUploader 
-                  currentLogo={logo}
-                  onLogoChange={handleLogoChange}
-                />
-              </div>
-              <div className="form-group">
-                <label className="form-label">Business Name</label>
-                <input 
-                  type="text"
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '8px'
+            }}>
+              <div style={{
+                display: 'flex',
+                gap: '8px'
+              }}>
+                <select 
                   className="form-input"
-                  defaultValue="Emerald Stream Capital"
-                />
-              </div>
-              <div className="form-group">
-                <label className="form-label">Calendar Link</label>
-                <input 
-                  type="text"
-                  className="form-input"
-                  defaultValue="calendly.com/emeraldstream"
-                />
-              </div>
-              <div className="form-group">
-                <label className="form-label">Response Tone</label>
-                <select className="form-input">
-                  <option>Professional</option>
-                  <option>Friendly</option>
-                  <option>Formal</option>
+                  style={{ flex: 1 }}
+                  defaultValue="manual"
+                >
+                  <option value="manual">Other Calendar URL</option>
+                  <option value="calendly" disabled>Connect Calendly to select links</option>
                 </select>
+                <button 
+                  className="button button-primary"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    backgroundColor: '#0A66C2',
+                    color: 'white'
+                  }}
+                  onClick={() => {
+                    window.open('https://auth.calendly.com/oauth/authorize', '_blank');
+                  }}
+                >
+                  Connect
+                </button>
               </div>
-              <div className="form-group">
-                <label className="form-label">Message Templates</label>
-                <textarea 
-                  className="form-input"
-                  style={{ height: '128px' }}
-                  placeholder="Enter your default message template..."
-                />
-              </div>
-              <button className="button button-primary" style={{ width: '10%' }}>
-                Save Settings
-              </button>
+              <input 
+                type="text"
+                className="form-input"
+                placeholder="Enter your calendar link manually (e.g., calendly.com/yourname)"
+              />
             </div>
           </div>
-        );
+        </div>
 
+        <div className="form-group">
+          <label className="form-label">LinkedIn Integration</label>
+          <div style={{ 
+            padding: '16px',
+            backgroundColor: '#fef2f2',
+            borderRadius: '8px',
+            border: '1px solid #fee2e2'
+          }}>
+            <div style={{ 
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: '12px'
+            }}>
+              <div>
+                <p style={{ 
+                  margin: '0 0 4px 0',
+                  fontWeight: '500'
+                }}>LinkedIn Account</p>
+                <p style={{ 
+                  margin: '0',
+                  fontSize: '0.875rem',
+                  color: '#6b7280'
+                }}>Connect your LinkedIn account to enable automatic outreach</p>
+              </div>
+              <span style={{ 
+                backgroundColor: '#fef2f2',
+                color: '#dc2626',
+                padding: '4px 12px',
+                borderRadius: '9999px',
+                fontSize: '0.875rem',
+                border: '1px solid #fee2e2'
+              }}>
+                Disconnected
+              </span>
+            </div>
+            <button 
+              className="button button-primary"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                backgroundColor: '#0A66C2',
+                color: 'white'
+              }}
+              onClick={() => {
+                window.open('https://www.linkedin.com/oauth/v2/authorization', '_blank');
+              }}
+            >
+              Connect with LinkedIn
+            </button>
+          </div>
+        </div>
+
+        <div className="form-group">
+          <label className="form-label">Response Tone</label>
+          <select className="form-input">
+            <option>Professional</option>
+            <option>Friendly</option>
+            <option>Formal</option>
+          </select>
+        </div>
+
+        <div className="form-group">
+          <label className="form-label">Message Templates</label>
+          <textarea 
+            className="form-input"
+            style={{ height: '128px' }}
+            placeholder="Enter your default message template..."
+          />
+        </div>
+
+        <button className="button button-primary" style={{ width: '10%' }}>
+          Save Settings
+        </button>
+      </div>
+    </div>
+  );
         
       
       default:
@@ -322,10 +455,7 @@ const AIResponderDashboard = () => {
       <div className="main-container">
         <aside className="sidebar">
           <div style={{ marginBottom: '32px' }}>
-            <LogoUploader 
-              currentLogo={logo}
-              onLogoChange={handleLogoChange}
-            />
+            
             <h1 style={{ textAlign: 'center', color: "#0A66C2", marginTop: '16px' }}>
               Emerald Stream Capital
             </h1>

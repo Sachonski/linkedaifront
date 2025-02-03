@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 
-// Dummy data for message threads and conversations
 const messageThreads = [
   {
     id: 1,
@@ -28,7 +27,7 @@ const messageThreads = [
 const conversations = {
   1: [
     { sender: 'Alice Johnson', message: 'Hi there, can we discuss the upcoming project?', time: '2:40 PM', type: 'received' },
-    { sender: 'You', message: 'Sure, what specifics did you want to go over?', time: '2:42 PM', type: 'sent' },
+    { sender: 'You', message: 'Here is my calendly.com/john', time: '2:42 PM', type: 'sent' },
     { sender: 'Alice Johnson', message: 'Sure, let\'s schedule that meeting', time: '2:45 PM', type: 'received' }
   ],
   2: [
@@ -50,10 +49,6 @@ const styles = {
     width: '33.33%',
     borderRight: '1px solid #edf2f7',
     backgroundColor: 'white',
-  },
-  threadsHeader: {
-    padding: '1rem',
-    borderBottom: '1px solid #edf2f7',
   },
   threadList: {
     borderBottom: '1px solid #f7fafc',
@@ -91,17 +86,6 @@ const styles = {
     color: '#a0aec0',
     marginRight: '0.5rem',
   },
-  unreadCount: {
-    backgroundColor: '#3b82f6',
-    color: 'white',
-    fontSize: '0.75rem',
-    borderRadius: '9999px',
-    height: '1.25rem',
-    width: '1.25rem',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   conversationPanel: {
     width: '66.67%',
     display: 'flex',
@@ -133,7 +117,7 @@ const styles = {
   messageReceived: {
     backgroundColor: '#edf2f7',
     color: '#1a202c',
-    alignSelf: 'flex-start', // Added to align received messages to the left
+    alignSelf: 'flex-start',
   },
   messageText: {
     fontSize: '0.875rem',
@@ -180,12 +164,59 @@ const styles = {
 const MessagesComponent = () => {
   const [selectedThread, setSelectedThread] = useState(null);
 
+  const hasCalendarLink = (threadId) => {
+    const threadMessages = conversations[threadId] || [];
+    return threadMessages.some(msg => msg.message.toLowerCase().includes('calendly'));
+  };
+
+  const getTotalBookings = () => {
+    return Object.values(conversations).reduce((count, messages) => {
+      return count + (messages.some(msg => msg.message.toLowerCase().includes('calendly')) ? 1 : 0);
+    }, 0);
+  };
+
+  const headerStats = {
+    totalConversations: Object.keys(conversations).length,
+    totalBookings: getTotalBookings()
+  };
+
   return (
     <div style={styles.container}>
-      {/* Left Side: Message Threads Panel */}
       <div style={styles.threadsPanel}>
-        <div style={styles.threadsHeader}>
-          <h2>My Inbox</h2>
+        <div style={{
+          padding: '1rem',
+          borderBottom: '1px solid #edf2f7',
+          backgroundColor: '#f8f9fa'
+        }}>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '0.5rem'
+          }}>
+            <span style={{ fontWeight: 500 }}>Total Conversations:</span>
+            <span style={{ 
+              backgroundColor: '#3B82F6',
+              color: 'white',
+              padding: '2px 8px',
+              borderRadius: '9999px',
+              fontSize: '0.875rem'
+            }}>{headerStats.totalConversations}</span>
+          </div>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }}>
+            <span style={{ fontWeight: 500 }}>Total Bookings Sent:</span>
+            <span style={{ 
+              backgroundColor: '#059669',
+              color: 'white',
+              padding: '2px 8px',
+              borderRadius: '9999px',
+              fontSize: '0.875rem'
+            }}>{headerStats.totalBookings}</span>
+          </div>
         </div>
         <div style={styles.threadList}>
           {messageThreads.map((thread) => (
@@ -203,36 +234,32 @@ const MessagesComponent = () => {
               </div>
               <div style={styles.threadMeta}>
                 <span style={styles.threadTimestamp}>{thread.timestamp}</span>
-                {thread.unreadCount > 0 && (
-                  <span style={styles.unreadCount}>{thread.unreadCount}</span>
-                )}
+                <div style={{
+                  width: '8px',
+                  height: '8px',
+                  borderRadius: '50%',
+                  backgroundColor: hasCalendarLink(thread.id) ? '#059669' : '#3B82F6'
+                }} />
               </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Right Side: Conversation Panel */}
       <div style={styles.conversationPanel}>
         {selectedThread ? (
           <>
-            {/* Conversation Header */}
             <div style={styles.conversationHeader}>
-              <h3>
-                {messageThreads.find((t) => t.id === selectedThread).sender}
-              </h3>
+              <h3>{messageThreads.find((t) => t.id === selectedThread).sender}</h3>
             </div>
 
-            {/* Conversation Messages */}
             <div style={styles.conversationMessages}>
               {conversations[selectedThread].map((msg, index) => (
                 <div
                   key={index}
                   style={{
                     ...styles.messageBubble,
-                    ...(msg.type === 'sent'
-                      ? styles.messageSent
-                      : styles.messageReceived),
+                    ...(msg.type === 'sent' ? styles.messageSent : styles.messageReceived),
                   }}
                 >
                   <p style={styles.messageText}>{msg.message}</p>
@@ -241,7 +268,6 @@ const MessagesComponent = () => {
               ))}
             </div>
 
-            {/* Message Input */}
             <div style={styles.conversationInput}>
               <input
                 type="text"

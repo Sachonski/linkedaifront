@@ -13,6 +13,7 @@ import {
   Timer
 } from 'lucide-react';
 import '../styles/Dashboard.css';
+import MessagesComponent from './MessagesComponent';
 
 const LogoUploader = ({ onLogoChange, currentLogo }) => {
   const handleFileInput = (e) => {
@@ -87,6 +88,9 @@ const AIResponderDashboard = () => {
 
   const renderContent = () => {
     switch(activeSection) {
+
+      
+
       case 'dashboard':
         return (
           <div className="stats-grid">
@@ -222,6 +226,18 @@ const AIResponderDashboard = () => {
             </div>
           </div>
         );
+
+        case 'messages':
+  return (
+    <div className="card h-full">
+      <div className="card-header">
+        <h2 className="card-title">My Inbox</h2>
+      </div>
+      <div className="card-body p-0 h-full">
+        <MessagesComponent />
+      </div>
+    </div>
+  );
       
       case 'settings':
         return (
@@ -275,6 +291,8 @@ const AIResponderDashboard = () => {
             </div>
           </div>
         );
+
+        
       
       default:
         return null;
